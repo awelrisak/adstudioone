@@ -1,4 +1,4 @@
-function FileDropzone({ handleChange, handleDrop }) {
+function FileDropzone({ handleImageChange }) {
   const handleDragOver = (e) => {
     e.preventDefault();
   };
@@ -6,7 +6,7 @@ function FileDropzone({ handleChange, handleDrop }) {
   return (
     <div
       className="relative  min-md:mx-auto mb-2 flex items-center justify-center w-full"
-      onDrop={handleDrop}
+      onDrop={handleImageChange}
       onDragOver={handleDragOver}
     >
       <label
@@ -41,7 +41,7 @@ function FileDropzone({ handleChange, handleDrop }) {
           type="file"
           className="hidden"
         
-          onChange={handleChange}
+          onChange={handleImageChange}
         />
       </label>
     </div>
