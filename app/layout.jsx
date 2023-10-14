@@ -15,8 +15,10 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.className}`}>
         <Header />
-        <main className="p-3 overflow-x-auto mx-auto max-w-2xl h-[calc(100vh-72px)]">
-          <section>{children}</section>
+        <main className=" px-3 py-7 overflow-y-auto mx-auto max-w-2xl h-[calc(100vh-60px)] scrollbar scrollbar-thumb-red-600">
+          <section>
+            {children}
+          </section>
         </main>
       </body>
     </html>

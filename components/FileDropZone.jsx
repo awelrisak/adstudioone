@@ -5,7 +5,7 @@ function FileDropzone({ handleImageChange }) {
 
   return (
     <div
-      className="relative  min-md:mx-auto mb-2 flex items-center justify-center w-full"
+      className="relative  min-md:mx-auto mb-1 flex items-center justify-center w-full"
       onDrop={handleImageChange}
       onDragOver={handleDragOver}
     >
@@ -40,7 +40,7 @@ function FileDropzone({ handleImageChange }) {
           id="dropzone-file"
           type="file"
           className="hidden"
-        
+          accept="image/*"
           onChange={handleImageChange}
         />
       </label>

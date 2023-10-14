@@ -8,10 +8,10 @@ import FileDropZone from "@/components/FileDropZone";
 import Resizer from "react-image-file-resizer";
 
 export default function FilePreviewer() {
-  const [actualImage, setActualImage] = useState("");
+  const [actualImage, setActualImage] = useState("");  
   const [resizedImage, setResizedImage] = useState("");
   const [isResizingImage, setIsResizingImage] = useState(false);
-  const [imageResizeError, setImageResizeError] = useState("");
+  const [error, setError] = useState("");
   
 
 
@@ -19,13 +19,22 @@ export default function FilePreviewer() {
     event.preventDefault();
     const file = event.target.files?.[0] || event.dataTransfer?.files?.[0]
     
-    if(file){
+    if(!file){
+       setError("Please select image file.");
+       return
+    }
+    
+    if(!file?.type?.includes("image")){
+      setError("Please select image file.");
+      return
+    }
+    
       const fileType = file.type.split("/")?.[1]
-      //generate image url
+      
       const imageURL = URL.createObjectURL(file);
       setActualImage(imageURL)
-      //resize image
-      
+    
+      //resize image      
       try{
         Resizer.imageFileResizer(
           file,
@@ -40,17 +49,39 @@ export default function FilePreviewer() {
         );
       } catch(error){
         console.log(error)
-        setImageResizeError(error?.message || JSON.stringify(error))
+        setError(error?.message || JSON.stringify(error))
       }
                 
-     }
-    
-    
+     
+       
   };
   
 
   return (
-    <div className="relative min-h-screen max-w-7xl mx-auto flex flex-col gap-7 md:gap-10 ">
+    <>
+    {
+      error && (
+        <div className="z-9999 mx-auto absolute top-3 w-[90%] flex items-center p-4 mb-4 bg-gray-800 text-red-400" role="alert">
+  <svg className="flex-shrink-0 w-4 h-4" ariaHidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+    <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z"/>
+  </svg>
+  <span className="sr-only">Error</span>
+  <div className="ml-3 text-sm font-medium">
+    { error }
+  </div>
+  <button 
+   onClick={() => setError("")}
+  type="button" className="ml-auto -mx-1.5 -my-1.5 rounded-lg focus:ring-2 focus:ring-red-400 p-1.5 inline-flex items-center justify-center h-8 w-8 bg-gray-800 text-red-400 hover:bg-gray-700" data-dismiss-target="#alert-2" ariaLabel="Close">
+    <span className="sr-only">Close</span>
+    <svg className="w-3 h-3" ariaHidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+      <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+    </svg>
+  </button>
+</div>
+
+      )
+    }
+  <div className="mt-5 relative flex flex-col gap-5 md:gap-10 ">
       <FileDropZone 
          handleImageChange={handleImageChange}         
         />
@@ -64,17 +95,18 @@ export default function FilePreviewer() {
      { 
        (actualImage && resizedImage) && (
           <div
-            className="flex flex-col gap-11"
+            className="mx-auto flex flex-wrap gap-10"
           >
-             <div
+          <div
         className="flex flex-col gap-3 w-[390px]"
       >
+        
         <div
         className="relative bg-gray-6 border border-lime-500 w-[390px] h-[75px]"
       >
          <Image         
-         src={actualImage}
-           alt="acrual image"
+           src={actualImage}
+           alt="actual image"
            fill
            className="object-contain"
           />
@@ -112,5 +144,6 @@ export default function FilePreviewer() {
      }
             
     </div>
+    </>
   );
 }
